@@ -1,4 +1,21 @@
 var $ = jQuery = require("jquery")
+var shell = require('shelljs');
+shell.config.execPath = shell.which('node');
+
+// Desktop files and folders to exception list
+if (process.platform !== 'darwin') {
+
+} else {
+	var desktopFiles = shell.ls('~/Desktop');
+	for(var i = 0; i < desktopFiles.length; i++) {
+		$('#exceptions-content').append('\
+			<label class="exception-item">\
+				' + desktopFiles[i] + '\
+				<input type="checkbox" class="exception-checkbox">\
+				<span class="exception-checkmark"></span>\
+			</label>');
+	}
+}
 
 // For custom file input
 $('#choose-directory').change(function() {
@@ -8,9 +25,6 @@ $('#choose-directory').change(function() {
 });
 
 function clean() {
-	var shell = require('shelljs');
-	shell.config.execPath = shell.which('node');
-
 	var currentdate = new Date();
 	var datetime = currentdate.getDate() + '-'
 				+ (currentdate.getMonth()+1)  + '-' 

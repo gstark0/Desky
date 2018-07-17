@@ -11,12 +11,31 @@
     <body>
         <script type="text/javascript" src="./assets/js/titlebar.js"></script>
 
+        <div id="exceptions-modal" class="modal">
+            <div class="modal-titlebar">
+                Choose exceptions
+            </div>
+
+            <div id="exceptions-content" class="modal-content">
+                
+            </div>
+
+            <div class="modal-bottom">
+
+            </div>
+        </div>
+
         <div id="main">
-            <!-- <input type="file" webkitdirectory name="path" placeholder="FOLDER PATH"> -->
-            <label for="choose-directory" class="custom-choose-directory">
+            <label for="choose-directory" class="custom-input">
                 <i class="fa fa-cloud-upload"></i> Choose directory
             </label>
             <input id="choose-directory" webkitdirectory name='choose_directory' type="file" style="display: none;">
+
+            <label for="choose_exceptions" class="custom-input">
+                <i class="fa fa-cloud-upload"></i> Choose exceptions
+            </label>
+            <button id="choose_exceptions" class="custom-input" name="choose_exceptions" style="display: none;"></button>
+
             <button onclick="clean()">CLEAN NOW</button>
         </div>
 
