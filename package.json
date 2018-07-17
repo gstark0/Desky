@@ -1,0 +1,28 @@
+{
+  "name": "keepdesktopclean",
+  "version": "0.1.0",
+  "description": "A simple app to keep everyone's desktop clean!",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gstark0/KeepDesktopClean.git"
+  },
+  "author": "Gregory Stark",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gstark0/KeepDesktopClean/issues"
+  },
+  "homepage": "https://github.com/gstark0/KeepDesktopClean#readme",
+  "devDependencies": {
+    "electron": "^2.0.5"
+  },
+  "dependencies": {
+    "electron-titlebar-windows": "^3.0.0",
+    "jquery": "^3.3.1",
+    "shelljs": "^0.8.2",
+    "titlebar": "^1.4.0"
+  }
+}

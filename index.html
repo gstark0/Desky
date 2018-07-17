@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>KeepDesktopClean</title>
+
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+        <link rel="stylesheet" href="./assets/css/main.css">
+    </head>
+
+    <body>
+        <script type="text/javascript" src="./assets/js/titlebar.js"></script>
+
+        <div id="main">
+            <!-- <input type="file" webkitdirectory name="path" placeholder="FOLDER PATH"> -->
+            <label for="choose-directory" class="custom-choose-directory">
+                <i class="fa fa-cloud-upload"></i> Choose directory
+            </label>
+            <input id="choose-directory" webkitdirectory name='choose_directory' type="file" style="display: none;">
+            <button onclick="clean()">CLEAN NOW</button>
+        </div>
+
+        <script type="text/javascript" src="./assets/js/script.js"></script>
+    </body>
+</html>
