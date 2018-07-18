@@ -2,24 +2,33 @@ var $ = jQuery = require("jquery")
 var shell = require('shelljs');
 shell.config.execPath = shell.which('node');
 
-var exceptions;
+var exceptionFiles = [];
+var desktopFiles = [];
 
 // Green button to apply all chosen exceptions
 function applyExceptions() {
-	exceptions = document.querySelectorAll('input[class=exception-checkbox]:checked');
+	var exceptions = document.querySelectorAll('input[class=exception-checkbox]:checked');
+	for(var i = 0; i < exceptions.length; i++) {
+		exceptionFiles[i] = exceptions[i].value
+	}
+	console.log(exceptionFiles);
 	cancelModal();
 }
 
-// Red button to cancel and leave modal
+// Red button to cancel and leave any modal
 function cancelModal() {
 	$('.modal').hide('slow');
+}
+
+function showModal(modalId) {
+	$('#' + modalId).show('slow');
 }
 
 // Desktop files and folders to exception list
 if (process.platform !== 'darwin') {
 
 } else {
-	var desktopFiles = shell.ls('~/Desktop');
+	desktopFiles = shell.ls('~/Desktop');
 	for(var i = 0; i < desktopFiles.length; i++) {
 		$('#exceptions-content').append('\
 			<label class="exception-item">\
@@ -50,8 +59,15 @@ function clean() {
 	var pathToArchive = pathToDirectory + '/' + datetime;
 	if (process.platform !== 'darwin') {
 
-	} else { 
+	} else {
+		var shellCommand = 'mv';
+		for(var i = 0; i < desktopFiles.length; i++) {
+			if($.inArray(desktopFiles[i], exceptionFiles) < 0)
+				shellCommand = shellCommand + ' $HOME/Desktop/\'' + desktopFiles[i] + '\'';
+		}
+		shellCommand = shellCommand + ' ' + pathToArchive + '/';
+		console.log(shellCommand);
 		shell.exec('mkdir ' + pathToArchive, {async: true});
-		shell.exec('mv $HOME/Desktop/* ' + pathToArchive, {async: true});
+		shell.exec(shellCommand, {async: true});
 	}
 }

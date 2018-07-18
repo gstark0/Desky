@@ -38,6 +38,7 @@ html, body {
 }
 
 .modal {
+	display: none;
 	position: absolute;
     left: 50%;
     top: 10;
