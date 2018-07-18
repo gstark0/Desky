@@ -38,6 +38,7 @@ html, body {
 }
 
 .modal {
+	border-radius: 2px;
 	display: none;
 	position: absolute;
     left: 50%;
@@ -86,7 +87,7 @@ html, body {
 }
 
 .modal-button {
-	border-radius: 1px;
+	border-radius: 2px;
 	margin: 20px;
 	margin-top: 4px;
 	margin-bottom: 4px;
@@ -108,6 +109,7 @@ html, body {
 }
 
 .exception-item {
+	border-radius: 2px;
 	display: block;
 	height: 30px;
 	line-height: 30px;
@@ -139,6 +141,7 @@ html, body {
 }
 
 .custom-input {
+	border-radius: 2px;
 	display: block;
 	padding-left: 10px;
 	padding-right: 10px;
@@ -170,6 +173,7 @@ html, body {
 }
 
 button {
+	border-radius: 2px;
 	display: block;
 	width: 150px;
 	height: 40px;

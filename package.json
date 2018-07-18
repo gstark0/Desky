@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/gstark0/KeepDesktopClean#readme",
   "devDependencies": {
-    "electron": "^2.0.5"
+    "electron": "^2.0.5",
+    "electron-tooltip": "^1.1.5"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.1.1",

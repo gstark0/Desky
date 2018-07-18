@@ -11,7 +11,7 @@ function applyExceptions() {
 	for(var i = 0; i < exceptions.length; i++) {
 		exceptionFiles[i] = exceptions[i].value
 	}
-	console.log(exceptionFiles);
+	$('#exceptions-label').text(exceptions.length + ' exceptions selected');
 	cancelModal();
 }
 
