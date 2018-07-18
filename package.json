@@ -17,14 +17,14 @@
   },
   "homepage": "https://github.com/gstark0/KeepDesktopClean#readme",
   "devDependencies": {
-    "electron": "^2.0.5",
-    "electron-tooltip": "^1.1.5"
+    "electron": "^2.0.5"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.1.1",
     "electron-titlebar-windows": "^3.0.0",
     "jquery": "^3.3.1",
     "shelljs": "^0.8.2",
+    "tippy.js": "^2.5.4",
     "titlebar": "^1.4.0"
   }
 }

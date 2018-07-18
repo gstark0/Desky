@@ -2,6 +2,9 @@ var $ = jQuery = require("jquery")
 var shell = require('shelljs');
 shell.config.execPath = shell.which('node');
 
+const tippy = require('tippy.js')
+tippy('label');
+
 var exceptionFiles = [];
 var desktopFiles = [];
 
@@ -11,7 +14,10 @@ function applyExceptions() {
 	for(var i = 0; i < exceptions.length; i++) {
 		exceptionFiles[i] = exceptions[i].value
 	}
-	$('#exceptions-label').text(exceptions.length + ' exceptions selected');
+	if(exceptions.length != 0)
+		$('#exceptions-label').text(exceptions.length + ' exceptions selected');
+	else
+		$('#exceptions-label').text('Choose exceptions');
 	cancelModal();
 }
 
