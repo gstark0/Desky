@@ -2,6 +2,19 @@ var $ = jQuery = require("jquery")
 var shell = require('shelljs');
 shell.config.execPath = shell.which('node');
 
+var exceptions;
+
+// Green button to apply all chosen exceptions
+function applyExceptions() {
+	exceptions = document.querySelectorAll('input[class=exception-checkbox]:checked');
+	cancelModal();
+}
+
+// Red button to cancel and leave modal
+function cancelModal() {
+	$('.modal').hide('slow');
+}
+
 // Desktop files and folders to exception list
 if (process.platform !== 'darwin') {
 
@@ -11,7 +24,7 @@ if (process.platform !== 'darwin') {
 		$('#exceptions-content').append('\
 			<label class="exception-item">\
 				' + desktopFiles[i] + '\
-				<input type="checkbox" class="exception-checkbox">\
+				<input type="checkbox" class="exception-checkbox" value="' + desktopFiles[i] + '">\
 				<span class="exception-checkmark"></span>\
 			</label>');
 	}

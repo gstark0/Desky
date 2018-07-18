@@ -5,24 +5,27 @@
         <title>KeepDesktopClean</title>
 
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
         <link rel="stylesheet" href="./assets/css/main.css">
+        <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.css">
     </head>
 
     <body>
         <script type="text/javascript" src="./assets/js/titlebar.js"></script>
 
         <div id="exceptions-modal" class="modal">
-            <div class="modal-titlebar">
-                Choose exceptions
-            </div>
+            <div class="modal-titlebar">Choose exceptions</div>
 
             <div id="exceptions-content" class="modal-content">
                 
             </div>
 
             <div class="modal-bottom">
-
+                <button onclick="applyExceptions()" id="exceptions-modal-apply" class="modal-button modal-apply">
+                    <i class="fa fa-check"></i>
+                </button>
+                <button onclick="cancelModal()" id="exceptions-modal-cancel" class="modal-button modal-cancel">
+                    <i class="fa fa-times"></i>
+                </button>
             </div>
         </div>
 
