@@ -9,119 +9,120 @@
  $fa-font-path: $fonts_path + 'font-awesome';
 @import '../../node_modules/@fortawesome/fontawesome-free/scss';
 
+/* -------- SCROLLBAR -------- */
+/* ---- Does it even work?!? ---- */
+::-webkit-scrollbar {
+    width: 15px;
+    background:lightgray;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,255,1); 
+    border-radius: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 15px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    background:cyan;
+} 
+
+/* -------- */
+
 input, button, textarea, :focus {
-    outline: none; // You should add some other style for :focus to help UX/a11y
+    outline: none;
 }
 
 * {
 	font-family: 'Roboto', sans-serif;
-	font-weight: 300;
+	letter-spacing: 1px;
 }
 
 html, body {
+	width: 100%;
+	height: 100%;
 	margin: 0;
 	padding: 0;
-	background-color: #3a3c4d;
+	background-color: #181E26;
 	color: #FFFFFF;
+	min-height: 100%;
 }
 
 .titlebar {
-	background-color: #3a3c4d;
+	background-color: #181E26;
 }
 
-#main {
-	position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-	width: 300px;
+.side {
+	width: 50%;
+	height: 85%;
+	display: flex;
+  	flex-direction: column;
+  	justify-content: center;
+  	background-color: #181E26;
 }
 
-.modal {
-	border-radius: 2px;
-	display: none;
-	position: absolute;
-    left: 50%;
-    top: 10;
-    transform: translate(-50%, 0);
-	width: 60%;
-	height: calc(95% - 60px);
-	background-color: #464756;
-	z-index: 1;
-}
-
-.modal-titlebar {
-	text-align: center;
-	font-size: 12px;
-	line-height: 30px;
-	font-weight: 400;
-	position: relative;
-	top: 0;
-	width: 100%;
-	height: 30px;
-	background-color: #4A4D5C;
-}
-
-.modal-bottom {
-	width: 100%;
-	height: 30px;
-	background-color: #4A4D5C;
-}
-
-.modal-apply {
+#left-side {
 	float: left;
-	background-color: transparent;
 }
 
-.modal-apply:hover {
-	background-color: #8bc34a;
-}
-
-.modal-cancel {
+#right-side {
 	float: right;
-	background-color: transparent;
 }
 
-.modal-cancel:hover {
-	background-color: #f44336;
+.side-inner {
+	position: relative;
+	max-width: 80%;
+	margin: auto;
 }
 
-.modal-button {
-	border-radius: 2px;
-	margin: 20px;
-	margin-top: 4px;
-	margin-bottom: 4px;
-	width: 22px;
-	height: 22px;
+/* -------- SIDEBAR -------- */
+.sidebar {
+	font-size: 13px;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	bottom: 0;
+	background-color: #1c2630;
+	overflow: hidden;
+	white-space: nowrap;
+	word-break: break-all;
+	transition: .5s;
 }
 
-.modal-button i {
-	margin-top: 3px;
+.sidebar-inner {
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	white-space: nowrap;
+	word-break: break-all;
 }
 
-#exceptions-modal .modal-content {
-	padding-left: 10px;
-	padding-right: 10px;
-	font-size: 12px;
-	height: calc(100% - 60px);
-	width: calc(100% - 20px);
-	overflow: scroll;
-}
-
-.exception-item {
-	border-radius: 2px;
+.exceptions-item {
+	width: 300px;
+	height: 40px;
+	color: #526770;
 	display: block;
-	height: 30px;
-	line-height: 30px;
-	border-top: 1px solid #5d6175;
-	border-left: 5px solid #464756;
-	padding-left: 10px;
+	font-size: 13px;
+	line-height: 40px;
+	border-left: 10px solid transparent;
+	padding-left: 20px;
 	transition: .2s;
 }
 
-.exception-item:hover {
-	background-color: #5d6175;
-	border-left: 5px solid #c8609e;
+.exceptions-item:hover {
+	border-left: 10px solid #3b6c94;
+	background-color: #272f3b;
+	color: #abcad9;
+}
+
+.exceptions-item div {
+	overflow: hidden;
+	white-space: nowrap;
+	word-break: break-all;
+	width: 200px;
+	float: left;
 }
 
 .exception-checkbox {
@@ -129,67 +130,148 @@ html, body {
 	display: none;
 }
 
-.exception-checkmark {
-	background-color: transparent;
-	float: right;
-	width: 5px;
-	height: 100%;
+.exceptions-item i {
+	display: none;
+	float: left;
+	line-height: 40px;
 }
 
-.exception-checkbox:checked ~ .exception-checkmark {
-	background-color: #8bc34a;
+.exception-checkbox:checked + i {
+	display: inline;
+	margin-left: 20px;
+}
+
+.sidebar button {
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background-color: #57d99c;
+	border: none;
+	transition: .2s;
+}
+
+.sidebar button:hover {
+	background-color: #42a576;
+}
+
+/* -------- INPUTS -------- */
+.input-label {
+	font-size: 13px;
+	margin-bottom: 10px;
 }
 
 .custom-input {
-	border-radius: 2px;
-	display: block;
+	white-space: nowrap;
+	font-size: 13px;
+	float: left;
+	border: 1px solid #7b8d9c;
+	background-color: transparent;
+	color: #7b8d9c;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	padding-left: 10px;
 	padding-right: 10px;
-	width: 300px;
-	height: 50px;
-	line-height: 50px;
-	background-color: #3a3c4d;
-	font-size: 12px;
-	font-weight: 400;
-	color: #687085;
-	border: none;
-	border-top: 1px solid #687085;
-	border-left: 4px solid #3a3c4d;
 	transition: .2s;
-	margin-bottom: 20px;
+	width: 200px;
+	overflow: hidden;
+	word-break: break-all;
 }
 
 .custom-input:hover {
-	border-left: 4px solid #c8609e;
-	background-color: #3f4152;
-	color: #c8609e;
+	background-color: #7b8d9c;
+	color: #181E26;
 }
 
-.custom-input:focus {
-	border-left: 4px solid #c8609e;
-	background-color: #3f4152;
-	color: #c8609e;
-	outline: none;
+/* -------- CHECKBOX -------- */
+.checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 12px;
+    color: #7b8d9c;
+    font-size: 13px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
-button {
-	border-radius: 2px;
-	display: block;
-	width: 150px;
-	height: 40px;
-	border: none;
-	font-weight: 400;
-	font-size: 12px;
-	margin: 0 auto;
-	color: white;
-	background-color: #c8609e;
-	transition: .2s;
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
 }
 
-button:hover {
-	background-color: #ad5389;
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid #7b8d9c;
+    transition: .2s;
 }
 
-button:focus {
-	outline: none;
+.checkbox-container:hover input ~ .checkmark {
+    background-color: #7b8d9c;
 }
+
+.checkbox-container:hover .checkmark:after {
+	left: 3px;
+    top: 1px;
+    width: 3px;
+    height: 6px;
+    border: solid #181E26;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkbox-container .checkmark:after {
+    left: 3px;
+    top: 1px;
+    width: 3px;
+    height: 6px;
+    border: solid #7b8d9c;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+
+/* -------- RANGE SLIDER -------- */
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 10px;
+    background: #57d99c;
+    outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #42a576;
+    cursor: pointer;
+}
+

@@ -8,6 +8,14 @@ tippy('label');
 var exceptionFiles = [];
 var desktopFiles = [];
 
+var sidebarPercentage = '';
+if (process.platform !== 'darwin') {
+	sidebarPercentage = ''; // ???????
+} else {
+	sidebarPercentage = '24px';
+}
+$('#exceptions-sidebar').css({height: 'calc(100% - ' + sidebarPercentage + ')'});
+
 // Green button to apply all chosen exceptions
 function applyExceptions() {
 	var exceptions = document.querySelectorAll('input[class=exception-checkbox]:checked');
@@ -15,19 +23,10 @@ function applyExceptions() {
 		exceptionFiles[i] = exceptions[i].value
 	}
 	if(exceptions.length != 0)
-		$('#exceptions-label').text(exceptions.length + ' exceptions selected');
+		$('#exceptions-label').text(exceptions.length + ' SELECTED');
 	else
-		$('#exceptions-label').text('Choose exceptions');
-	cancelModal();
-}
-
-// Red button to cancel and leave any modal
-function cancelModal() {
-	$('.modal').hide('slow');
-}
-
-function showModal(modalId) {
-	$('#' + modalId).show('slow');
+		$('#exceptions-label').text('NOTHING SELECTED');
+	$('#exceptions-sidebar').css({width: '0'});
 }
 
 // Desktop files and folders to exception list
@@ -36,12 +35,12 @@ if (process.platform !== 'darwin') {
 } else {
 	desktopFiles = shell.ls('~/Desktop');
 	for(var i = 0; i < desktopFiles.length; i++) {
-		$('#exceptions-content').append('\
-			<label class="exception-item">\
-				' + desktopFiles[i] + '\
-				<input type="checkbox" class="exception-checkbox" value="' + desktopFiles[i] + '">\
-				<span class="exception-checkmark"></span>\
-			</label>');
+		$('#exceptions-inner').append('\
+			<label class="exceptions-item">\
+                    <div>' + desktopFiles[i] + '</div>\
+                    <input type="checkbox" class="exception-checkbox" value="' + desktopFiles[i] + '">\
+                    <i class="fa fa-check"></i>\
+             </label>');
 	}
 }
 
@@ -76,4 +75,31 @@ function clean() {
 		shell.exec('mkdir ' + pathToArchive, {async: true});
 		shell.exec(shellCommand, {async: true});
 	}
+}
+
+function changeArchiveFrequency(step) {
+	switch(step) {
+		case '1':
+			$('#freq-label').text('Never');
+			break;
+		case '2':
+			$('#freq-label').text('Every startup');
+			break;
+		case '3':
+			$('#freq-label').text('Once an hour');
+			break;
+		case '4':
+			$('#freq-label').text('Once a day');
+			break;
+		case '5':
+			$('#freq-label').text('Once a week');
+			break;
+		case '6':
+			$('#freq-label').text('Once a month');
+			break;
+	}
+}
+
+function openExceptionsSidebar() {
+	$('#exceptions-sidebar').css({width: '300px'});
 }

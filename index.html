@@ -12,35 +12,47 @@
     <body>
         <script type="text/javascript" src="./assets/js/titlebar.js"></script>
 
-        <div id="exceptions-modal" class="modal">
-            <div class="modal-titlebar">Choose exceptions</div>
+        <div id="exceptions-sidebar" class="sidebar">
+            <div id="exceptions-inner" class="sidebar-inner">
 
-            <div id="exceptions-content" class="modal-content">
-                
             </div>
+            <button id="exceptions-accept" onclick="applyExceptions()"><i class="fa fa-check"></i></button>
+        </div>
 
-            <div class="modal-bottom">
-                <button onclick="applyExceptions()" id="exceptions-modal-apply" class="modal-button modal-apply">
-                    <i class="fa fa-check"></i>
-                </button>
-                <button onclick="cancelModal()" id="exceptions-modal-cancel" class="modal-button modal-cancel">
-                    <i class="fa fa-times"></i>
-                </button>
+        <div id="left-side" class="side">
+            <div class="side-inner">
+                <div class="input-label">DESKTOP ARCHIVE LOCATION</div>
+                <label for="choose-directory" class="custom-input" style="margin-bottom: 30px;">
+                    NO LOCATION SPECIFIED
+                </label>
+                <input id="choose-directory" webkitdirectory name='choose_directory' type="file" style="display: none;">
+
+                <div class="input-label">FILES OR FOLDERS TO SKIP</div>
+                <label for="choose_exceptions" id="exceptions-label" class="custom-input">
+                    NOTHING SELECTED
+                </label>
+                <button id="choose_exceptions" onclick="openExceptionsSidebar()" class="custom-input" name="choose_exceptions" style="display: none;"></button>
             </div>
         </div>
 
-        <div id="main">
-            <label for="choose-directory" class="custom-input" title="Your desktop will be archived here.">
-                Choose directory
-            </label>
-            <input id="choose-directory" webkitdirectory name='choose_directory' type="file" style="display: none;">
+        <div id="right-side" class="side">
+            <div class="side-inner">
+                <div class="input-label">OPTIONS</div>
+                <label class="checkbox-container">Smart Archive
+                    <input type="checkbox" checked="checked">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="checkbox-container" style="margin-bottom: 30px;">.ZIP archive
+                    <input type="checkbox" checked="checked">
+                    <span class="checkmark"></span>
+                </label>
 
-            <label for="choose_exceptions" id="exceptions-label" class="custom-input" title="These files and folders won't be archived!">
-               Choose exceptions
-            </label>
-            <button id="choose_exceptions" onclick="showModal('exceptions-modal')" class="custom-input" name="choose_exceptions" style="display: none;"></button>
+                <div class="input-label">ARCHIVE FREQUENCY</div>
+                <div id="freq-label" style="font-size: 13; color: #7b8d9c;">Never</div>
+                <input oninput="changeArchiveFrequency(this.value)" type="range" min="1" max="6" value="1" step="1" class="slider" id="archiveFreqSlider">
 
-            <button onclick="clean()">CLEAN NOW</button>
+                <!-- <button onclick="clean()">CLEAN NOW</button> -->
+            </div>
         </div>
 
         <script type="text/javascript" src="./assets/js/script.js"></script>
