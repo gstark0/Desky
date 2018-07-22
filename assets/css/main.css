@@ -275,3 +275,24 @@ html, body {
     cursor: pointer;
 }
 
+/* -------- GO BUTTON -------- */
+#go-button {
+	width: 60px;
+	height: 60px;
+	position: fixed;
+	line-height: 60px;
+	bottom: 10px;
+	right: 20px;
+	background-color: transparent;
+	font-size: 13px;
+	border: none;
+	transition: .2s;
+	text-align: center;
+	color: white;
+}
+
+#go-button:hover {
+	/* background-color: #42a576; */
+	color: #7b8d9c;
+}
+
