@@ -8,6 +8,7 @@ tippy('label');
 var exceptionFiles = [];
 var desktopFiles = [];
 
+// Because of differences in height of titlebar for each platform, sidebar's height has to be set manually
 var sidebarPercentage = '';
 if (process.platform !== 'darwin') {
 	sidebarPercentage = ''; // ???????
@@ -50,6 +51,18 @@ $('#choose-directory').change(function() {
 	var file = $('#choose-directory')[0].files[0].path;
 	$(this).prev('label').text(file);
 });
+
+function smartArchiveCheck() {
+	if($('#smartArchiveCheckbox').is(':checked')) {
+		$('#archiveFreqSlider').prop('disabled', true);
+		$('#freq-big-label').css('text-decoration', 'line-through');
+		$('#freq-label').css('text-decoration', 'line-through');
+	} else {
+		$('#archiveFreqSlider').prop('disabled', false);
+		$('#freq-big-label').css('text-decoration', 'none');
+		$('#freq-label').css('text-decoration', 'none');
+	}
+}
 
 function clean() {
 	var currentdate = new Date();
