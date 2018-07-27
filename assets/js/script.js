@@ -99,37 +99,40 @@ function apply() {
 	if($('#choose-directory-label').text() == 'NO LOCATION SPECIFIED') {
 		$('#location-error').show();
 	} else {
-		// savedDate = new Date();
-		let w = remote.getCurrentWindow();
-		// sliderValue = $('#archiveFreqSlider').val();
-		clearInterval(iv);
-		switch(sliderValue) {
-			case '1':
-				clean();
-				w.close();
-				break;
-			case '2':
-				w.close();
-				break;
-			case '3':
-				iv = setInterval(checkClean.bind(null, 20), 2000); //3600, interval
-				//w.close();
-				break;
-			case '4':
-				iv = setInterval(checkClean.bind(null, 20), 2000); //86400, interval
-				//w.close();
-				break;
-			case '5':
-				iv = setInterval(checkClean.bind(null, 20), 2000); //604800, interval
-				//w.close();
-				break;
-			case '6':
-				iv = setInterval(checkClean.bind(null, 20), 2000); //2419200, interval
-				//w.close();
-				break;
-		}
+		startClean();
 	}
-	
+}
+
+function startClean() {
+	// savedDate = new Date();
+	let w = remote.getCurrentWindow();
+	// sliderValue = $('#archiveFreqSlider').val();
+	clearInterval(iv);
+	switch(sliderValue) {
+		case '1':
+			clean();
+			//w.close();
+			break;
+		case '2':
+			w.close();
+			break;
+		case '3':
+			iv = setInterval(checkClean.bind(null, 20), 2000); //3600, interval
+			//w.close();
+			break;
+		case '4':
+			iv = setInterval(checkClean.bind(null, 20), 2000); //86400, interval
+			//w.close();
+			break;
+		case '5':
+			iv = setInterval(checkClean.bind(null, 20), 2000); //604800, interval
+			//w.close();
+			break;
+		case '6':
+			iv = setInterval(checkClean.bind(null, 20), 2000); //2419200, interval
+			//w.close();
+			break;
+	}
 }
 
 function checkClean(maxDifference) {
@@ -214,10 +217,11 @@ function loadConfig() {
 		// Exceptions
 		var exceptionsConfigContent = fs.readFileSync(app.getPath('userData') + '/' + 'exceptions_' + configName, 'utf-8');
 		var exceptionFiles = exceptionsConfigContent.split(':');
-		for(var i = 0; i < exceptionFiles.length; i++) {
+		for(var i = 0; i < exceptionFiles.length-1; i++) {
 			$('input[type=checkbox][value="' + exceptionFiles[i] + '"]').prop('checked', true);
 		}
 		applyExceptions();
+		startClean();
 	} catch(err) {
 		if (err.code !== 'ENOENT') {
 			throw err;
