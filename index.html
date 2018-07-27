@@ -14,7 +14,7 @@
 
         <div id="exceptions-sidebar" class="sidebar">
             <div id="exceptions-inner" class="sidebar-inner">
-
+                
             </div>
             <button id="exceptions-accept" onclick="applyExceptions()"><i class="fa fa-check"></i></button>
         </div>
@@ -22,15 +22,11 @@
         <div id="left-side" class="side">
             <div class="side-inner">
                 <div class="input-label">DESKTOP ARCHIVE LOCATION</div>
-                <label for="choose-directory" class="custom-input" style="margin-bottom: 30px;">
-                    NO LOCATION SPECIFIED
-                </label>
+                <label for="choose-directory" class="custom-input" id="choose-directory-label" style="margin-bottom: 30px;">NO LOCATION SPECIFIED</label>
                 <input id="choose-directory" webkitdirectory name='choose_directory' type="file" style="display: none;">
 
                 <div class="input-label">FILES OR FOLDERS TO SKIP</div>
-                <label for="choose_exceptions" id="exceptions-label" class="custom-input">
-                    NOTHING SELECTED
-                </label>
+                <label for="choose_exceptions" id="exceptions-label" class="custom-input">NOTHING SELECTED</label>
                 <button id="choose_exceptions" onclick="openExceptionsSidebar()" class="custom-input" name="choose_exceptions" style="display: none;"></button>
             </div>
         </div>
@@ -42,7 +38,11 @@
                     <input type="checkbox" id='smartArchiveCheckbox' onclick="smartArchiveCheck()">
                     <span class="checkmark"></span>
                 </label>
-                <label class="checkbox-container" style="margin-bottom: 30px;">.ZIP archive
+                <label class="checkbox-container">.ZIP archive
+                    <input type="checkbox">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="checkbox-container" style="margin-bottom: 30px;">Keep files on desktop
                     <input type="checkbox">
                     <span class="checkmark"></span>
                 </label>
@@ -50,12 +50,11 @@
                 <div class="input-label" id="freq-big-label">ARCHIVE FREQUENCY</div>
                 <div id="freq-label" style="font-size: 13; color: #7b8d9c;">Never</div>
                 <input oninput="changeArchiveFrequency(this.value)" type="range" min="1" max="6" value="1" step="1" class="slider" id="archiveFreqSlider">
-
-                <!-- <button onclick="clean()">CLEAN NOW</button> -->
             </div>
         </div>
 
-        <button id="go-button" onclick="clean()">APPLY</button>
+        <div id="location-error">No archive location specified!</div>
+        <button id="go-button" onclick="apply()">APPLY</button>
 
         <script type="text/javascript" src="./assets/js/script.js"></script>
     </body>

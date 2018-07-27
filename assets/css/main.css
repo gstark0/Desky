@@ -296,7 +296,17 @@ html, body {
 }
 
 #go-button:hover {
-	/* background-color: #42a576; */
 	color: #7b8d9c;
+}
+
+#location-error {
+	display: none;
+	font-size: 13px;
+	color: red;
+	position: fixed;
+	bottom: 8px;
+	height: 60px;
+	line-height: 60px;
+	right: 100px;
 }
 
