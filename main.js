@@ -1,18 +1,25 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, Tray} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+var tray;
 
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    title: 'KeepDesktopClean',
     width: 640, height: 360,
     resizable: false,
     fullscreen: false,
     transparent: true,
     frame: false
+  })
+
+  tray = new Tray('./iconTemplate.png')
+  tray.on('click', () => {
+    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
   })
 
   // and load the index.html of the app.
@@ -37,9 +44,11 @@ app.on('ready', createWindow)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
+  tray.destroy()
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
+    tray.
     app.quit()
   }
 })

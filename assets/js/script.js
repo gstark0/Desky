@@ -1,23 +1,20 @@
 const fs = require('fs')
 const app = remote.app;
-/* TESTING FILE SAVING - WORKS */ /*
-const fs = require('fs')
-const app = remote.app;
 
-console.log(app.getPath('userData'))
-const configName = 'config.txt';
-
-// LOAD
-var content = fs.readFileSync(app.getPath('userData')+'/config.txt', 'utf-8'); */
-/* TESTING FILE SAVING - WORKS */
-
-var $ = jQuery = require("jquery")
+// Basic imports, JQuery and ShellJS
+var $ = jQuery = require('jquery')
 var shell = require('shelljs');
 shell.config.execPath = shell.which('node');
 
-const configName = 'config.txt';
-const tippy = require('tippy.js')
-tippy('label');
+
+// --- Database ---
+const low = require('lowdb')
+const FileSync = require('lowdb/adapters/FileSync')
+const adapter = new FileSync(app.getPath('userData') + '/' + 'config.json')
+const db = low(adapter)
+// --- Database ---
+
+//const configName = 'config.txt';
 
 var exceptionFiles = [];
 var desktopFiles = [];
@@ -46,17 +43,21 @@ function applyExceptions() {
 }
 
 // Desktop files and folders to exception list
-if (process.platform !== 'darwin') {
+refreshFiles();
+function refreshFiles() {
+	if (process.platform !== 'darwin') {
 
-} else {
-	desktopFiles = shell.ls('~/Desktop');
-	for(var i = 0; i < desktopFiles.length; i++) {
-		$('#exceptions-inner').append('\
-			<label class="exceptions-item">\
-                    <div>' + desktopFiles[i] + '</div>\
-                    <input type="checkbox" id="exception-' + desktopFiles[i] + '" class="exception-checkbox" value="' + desktopFiles[i] + '">\
-                    <i class="fa fa-check"></i>\
-             </label>');
+	} else {
+		desktopFiles = shell.ls('~/Desktop');
+		$('#exceptions-inner').html('');
+		for(var i = 0; i < desktopFiles.length; i++) {
+			$('#exceptions-inner').append('\
+				<label class="exceptions-item">\
+	                    <div>' + desktopFiles[i] + '</div>\
+	                    <input type="checkbox" id="exception-' + desktopFiles[i] + '" class="exception-checkbox" value="' + desktopFiles[i] + '">\
+	                    <i class="fa fa-check"></i>\
+	             </label>');
+		}
 	}
 }
 
@@ -89,6 +90,8 @@ var interval = 1800000;
 var pathToDirectory;
 var sliderValue;
 var lastTime;
+var smartArchiveEnabled;
+var zipArchiveEnabled;
 var interval = 1800000;
 var iv;
 loadConfig();
@@ -101,6 +104,7 @@ function apply() {
 	} else {
 		startClean();
 	}
+	//w.hide();
 }
 
 function startClean() {
@@ -108,30 +112,40 @@ function startClean() {
 	let w = remote.getCurrentWindow();
 	// sliderValue = $('#archiveFreqSlider').val();
 	clearInterval(iv);
-	switch(sliderValue) {
-		case '1':
-			clean();
-			//w.close();
-			break;
-		case '2':
-			w.close();
-			break;
-		case '3':
-			iv = setInterval(checkClean.bind(null, 20), 2000); //3600, interval
-			//w.close();
-			break;
-		case '4':
-			iv = setInterval(checkClean.bind(null, 20), 2000); //86400, interval
-			//w.close();
-			break;
-		case '5':
-			iv = setInterval(checkClean.bind(null, 20), 2000); //604800, interval
-			//w.close();
-			break;
-		case '6':
-			iv = setInterval(checkClean.bind(null, 20), 2000); //2419200, interval
-			//w.close();
-			break;
+	if(smartArchiveEnabled) {
+		iv = setInterval(checkCleanSmart, 2000); //3600, interval
+	} else {
+		switch(sliderValue) {
+			case '1':
+				clean();
+				//w.close();
+				break;
+			case '2':
+				// w.close();
+				break;
+			case '3':
+				iv = setInterval(checkClean.bind(null, 20), 2000); //3600, interval
+				//w.close();
+				break;
+			case '4':
+				iv = setInterval(checkClean.bind(null, 20), 2000); //86400, interval
+				//w.close();
+				break;
+			case '5':
+				iv = setInterval(checkClean.bind(null, 20), 2000); //604800, interval
+				//w.close();
+				break;
+			case '6':
+				iv = setInterval(checkClean.bind(null, 20), 2000); //2419200, interval
+				//w.close();
+				break;
+		}
+	}
+}
+
+function checkCleanSmart() {
+	if(shell.ls('~/Desktop').length - exceptionFiles.length > 10) {
+		clean();
 	}
 }
 
@@ -170,15 +184,19 @@ function clean() {
 		console.log(shellCommand);
 		shell.exec('mkdir ' + pathToArchive, {async: true});
 		shell.exec(shellCommand, {async: true});
+		if(zipArchiveEnabled) {
+			console.log('cd ' + pathToDirectory + '; zip -r ' + datetime + ' ' + datetime)
+			shell.exec('cd ' + pathToDirectory + '; zip -r ' + datetime + ' ' + datetime, {async: true});
+			shell.exec('rm -rf ' + pathToArchive, {async: true});
+		}
 	}
-	savedDate = currentDate;
 	*/
 }
 
 function changeArchiveFrequency(step) {
 	switch(step) {
 		case '1':
-			$('#freq-label').text('Never');
+			$('#freq-label').text('Just once');
 			break;
 		case '2':
 			$('#freq-label').text('Every startup');
@@ -204,10 +222,12 @@ function openExceptionsSidebar() {
 
 function loadConfig() {
 	try {
-		var configContent = fs.readFileSync(app.getPath('userData') + '/' + configName, 'utf-8');
-		pathToDirectory = configContent.split(':')[0];
-		sliderValue = configContent.split(':')[1];
-		lastTime = Number(configContent.split(':')[2]);
+		pathToDirectory = db.get('archiveLocation').value();
+		sliderValue = db.get('sliderValue').value();
+		lastTime = db.get('lastTime').value();
+		smartArchiveEnabled = db.get('smartArchiveEnabled').value();
+		zipArchiveEnabled = db.get('zipArchiveEnabled').value();
+		exceptionFiles = db.get('exceptions').value();
 
 		changeArchiveFrequency(sliderValue);
 		$('#choose-directory-label').text(pathToDirectory);
@@ -215,15 +235,19 @@ function loadConfig() {
 		$('#archiveFreqSlider').val(sliderValue);
 
 		// Exceptions
-		var exceptionsConfigContent = fs.readFileSync(app.getPath('userData') + '/' + 'exceptions_' + configName, 'utf-8');
-		var exceptionFiles = exceptionsConfigContent.split(':');
-		for(var i = 0; i < exceptionFiles.length-1; i++) {
+		for(var i = 0; i < exceptionFiles.length; i++) {
 			$('input[type=checkbox][value="' + exceptionFiles[i] + '"]').prop('checked', true);
 		}
+
+		if(smartArchiveEnabled)
+			$('#smartArchiveCheckbox').prop('checked', true);
+		if(zipArchiveEnabled)
+			$('#zipArchiveCheckbox').prop('checked', true);
+		smartArchiveCheck();
 		applyExceptions();
 		startClean();
 	} catch(err) {
-		if (err.code !== 'ENOENT') {
+		if (!err instanceof TypeError) {
 			throw err;
 		}
 	}
@@ -231,16 +255,24 @@ function loadConfig() {
 }
 
 function saveConfig() {
-	pathToDirectory = $('#choose-directory-label').val();
+	// Set some defaults (required if your JSON file is empty)
+	db.defaults({ archiveLocation: '', exceptions: [], smartArchiveEnabled: false, zipArchiveEnabled: false, sliderValue: 0, lastTime: 0 }).write()
+
+	pathToDirectory = $('#choose-directory-label').text();
 	sliderValue = $('#archiveFreqSlider').val();
 	lastTime = $.now();
-	configContent = pathToDirectory + ':' + sliderValue + ':' + lastTime + ':';
-	fs.writeFile(app.getPath('userData') + '/' + configName, configContent, function (err) {});
-	var exceptionsConfigContent = '';
+	smartArchiveEnabled = $('#smartArchiveCheckbox').is(':checked');
+	zipArchiveEnabled = $('#zipArchiveCheckbox').is(':checked');
+
+	db.set('archiveLocation', pathToDirectory).write();
+	db.set('smartArchiveEnabled', smartArchiveEnabled).write();
+	db.set('zipArchiveEnabled', zipArchiveEnabled).write();
+	db.set('sliderValue', sliderValue).write();
+	db.set('lastTime', lastTime).write();
+	db.set('exceptions', []).write();
 	for(var i = 0; i < exceptionFiles.length; i++) {
-		console.log(exceptionFiles[i]);
-		exceptionsConfigContent += exceptionFiles[i] + ':';
+		//console.log(exceptionFiles[i]);
+		db.get('exceptions').push(exceptionFiles[i]).write();
 	}
-	fs.writeFile(app.getPath('userData') + '/' + 'exceptions_' + configName, exceptionsConfigContent, function (err) {});
 	console.log('SAVED');
 }

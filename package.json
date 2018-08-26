@@ -23,6 +23,7 @@
     "@fortawesome/fontawesome-free": "^5.1.1",
     "electron-titlebar-windows": "^3.0.0",
     "jquery": "^3.3.1",
+    "lowdb": "^1.0.0",
     "shelljs": "^0.8.2",
     "tippy.js": "^2.5.4",
     "titlebar": "^1.4.0"
