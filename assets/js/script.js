@@ -1,6 +1,10 @@
 const fs = require('fs')
 const app = remote.app;
 
+require('electron').ipcRenderer.on('clean', function(event) {
+	clean();
+});
+
 // Basic imports, JQuery and ShellJS
 var $ = jQuery = require('jquery')
 var shell = require('shelljs');
@@ -63,9 +67,15 @@ function refreshFiles() {
 
 // For custom file input
 $('#choose-directory').change(function() {
-	var i = $(this).prev('label').clone();
-	var file = $('#choose-directory')[0].files[0].path;
-	$(this).prev('label').text(file);
+	try {
+		var i = $(this).prev('label').clone();
+		var file = $('#choose-directory')[0].files[0].path;
+		$(this).prev('label').text(file);
+		$('#location-error').hide();
+	} catch(err) {
+		$(this).prev('label').text('NO LOCATION SPECIFIED');
+		$('#location-error').show();
+	}
 });
 
 function smartArchiveCheck() {
@@ -245,7 +255,8 @@ function loadConfig() {
 			$('#zipArchiveCheckbox').prop('checked', true);
 		smartArchiveCheck();
 		applyExceptions();
-		startClean();
+		if(sliderValue != '1')
+			startClean();
 	} catch(err) {
 		if (!err instanceof TypeError) {
 			throw err;

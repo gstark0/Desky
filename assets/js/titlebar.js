@@ -7,7 +7,7 @@ var t;
 if (process.platform !== 'darwin') {
 
 	const titlebar = require('electron-titlebar-windows');
-    t = new ElectronTitlebarWindows(options={fullscreen: false, draggable: true});
+    t = new titlebar(options={fullscreen: false, draggable: true});
 
 } else {
 
@@ -18,5 +18,9 @@ if (process.platform !== 'darwin') {
 
 t.appendTo(document.body);
 t.on('close', function(e) {
-    w.close()
+    //w.close()
+    w.hide()
+});
+t.on('minimize', function(e) {
+    w.minimize()
 });
