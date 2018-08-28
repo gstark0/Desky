@@ -28,7 +28,7 @@ var desktopFiles = [];
 // Because of differences in height of titlebar for each platform, sidebar's height has to be set manually
 var sidebarPercentage = '';
 if (process.platform !== 'darwin') {
-	sidebarPercentage = ''; // ???????
+	sidebarPercentage = '32px'; // ???????
 } else {
 	sidebarPercentage = '24px';
 }
@@ -51,19 +51,15 @@ function applyExceptions() {
 // Desktop files and folders to exception list
 refreshFiles();
 function refreshFiles() {
-	if (process.platform !== 'darwin') {
-
-	} else {
-		desktopFiles = shell.ls('~/Desktop');
-		$('#exceptions-inner').html('');
-		for(var i = 0; i < desktopFiles.length; i++) {
-			$('#exceptions-inner').append('\
-				<label class="exceptions-item">\
-	                    <div>' + desktopFiles[i] + '</div>\
-	                    <input type="checkbox" id="exception-' + desktopFiles[i] + '" class="exception-checkbox" value="' + desktopFiles[i] + '">\
-	                    <i class="fa fa-check"></i>\
-	             </label>');
-		}
+	desktopFiles = shell.ls('~/Desktop');
+	$('#exceptions-inner').html('');
+	for(var i = 0; i < desktopFiles.length; i++) {
+		$('#exceptions-inner').append('\
+			<label class="exceptions-item">\
+                    <div>' + desktopFiles[i] + '</div>\
+                    <input type="checkbox" id="exception-' + desktopFiles[i] + '" class="exception-checkbox" value="' + desktopFiles[i] + '">\
+                    <i class="fa fa-check"></i>\
+             </label>');
 	}
 }
 
@@ -129,7 +125,7 @@ function showAlert(message) {
 	}).then(function() {
 		// it can do smth on 'OK' click
 	});
-	$('body.swal2-height-auto').css('height', '100%');
+	$('body').removeClass('swal2-height-auto');
 	$('.swal2-styled:focus').css('box-shadow', 'none');
 	$('.swal2-styled').css('border-radius', '2px');
 	$('.swal2-popup .swal2-styled:not([disabled])').css('cursor', 'default');
@@ -264,6 +260,7 @@ function changeArchiveFrequency(step) {
 }
 
 function openExceptionsSidebar() {
+	console.log('WORKS?????????????????')
 	$('#exceptions-sidebar').css({width: '300px'});
 }
 
