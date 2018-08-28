@@ -5,6 +5,8 @@ require('electron').ipcRenderer.on('clean', function(event) {
 	clean();
 });
 
+const Swal = require('sweetalert2') // In order to make cool alerts
+
 // Basic imports, JQuery and ShellJS
 var $ = jQuery = require('jquery')
 var shell = require('shelljs');
@@ -117,37 +119,68 @@ function apply() {
 	//w.hide();
 }
 
+function showAlert(message) {
+	Swal({
+		title: '<span style="color:white">' + message + '</span>',
+		background: '#181E26',
+		color: 'white',
+		type: 'success',
+		confirmButtonColor: '#57d99c'
+	}).then(function() {
+		// it can do smth on 'OK' click
+	});
+	$('body.swal2-height-auto').css('height', '100%');
+	$('.swal2-styled:focus').css('box-shadow', 'none');
+	$('.swal2-styled').css('border-radius', '2px');
+	$('.swal2-popup .swal2-styled:not([disabled])').css('cursor', 'default');
+}
+
+function showNotification(message) {
+	let myNotification = new Notification('KeepDesktopClean', { body: message })
+}
+
 function startClean() {
 	// savedDate = new Date();
 	let w = remote.getCurrentWindow();
 	// sliderValue = $('#archiveFreqSlider').val();
 	clearInterval(iv);
 	if(smartArchiveEnabled) {
-		iv = setInterval(checkCleanSmart, 2000); //3600, interval
+		iv = setInterval(checkCleanSmart, interval); //3600, interval
+		showNotification('Smart archive activated!');
 	} else {
 		switch(sliderValue) {
 			case '1':
 				clean();
+				showAlert('Cleaned!');
 				//w.close();
 				break;
 			case '2':
-				// w.close();
+				showNotification('Desktop will be cleaned every computer startup!');
+				w.hide();
 				break;
 			case '3':
-				iv = setInterval(checkClean.bind(null, 20), 2000); //3600, interval
-				//w.close();
+				iv = setInterval(checkClean.bind(null, 3600), interval); //3600, interval 
+				//showAlert('All set!'); 
+				showNotification('Desktop will be cleaned every hour!');
+				w.hide();
 				break;
 			case '4':
-				iv = setInterval(checkClean.bind(null, 20), 2000); //86400, interval
-				//w.close();
+				iv = setInterval(checkClean.bind(null, 86400), interval); //86400, interval
+				//showAlert('All set!'); 
+				showNotification('Desktop will be cleaned every day!');
+				w.hide();
 				break;
 			case '5':
-				iv = setInterval(checkClean.bind(null, 20), 2000); //604800, interval
-				//w.close();
+				iv = setInterval(checkClean.bind(null, 604800), interval); //604800, interval
+				//showAlert('All set!'); 
+				showNotification('Desktop will be cleaned every week!');
+				w.hide();
 				break;
 			case '6':
-				iv = setInterval(checkClean.bind(null, 20), 2000); //2419200, interval
-				//w.close();
+				iv = setInterval(checkClean.bind(null, 2419200), interval); //2419200, interval
+				//showAlert('All set!'); 
+				showNotification('Desktop will be cleaned every month!');
+				w.hide();
 				break;
 		}
 	}
@@ -172,7 +205,7 @@ function checkClean(maxDifference) {
 
 function clean() {
 	console.log('SHOULD CLEAR NOW');
-	/*
+	
 	var currentdate = new Date();
 	var datetime = currentdate.getDate() + '-'
 				+ (currentdate.getMonth()+1)  + '-' 
@@ -200,7 +233,11 @@ function clean() {
 			shell.exec('rm -rf ' + pathToArchive, {async: true});
 		}
 	}
-	*/
+	
+	refreshFiles();
+	loadExceptions();
+
+	showNotification('Desktop cleaned!');
 }
 
 function changeArchiveFrequency(step) {
@@ -230,6 +267,12 @@ function openExceptionsSidebar() {
 	$('#exceptions-sidebar').css({width: '300px'});
 }
 
+function loadExceptions() {
+	for(var i = 0; i < exceptionFiles.length; i++) {
+		$('input[type=checkbox][value="' + exceptionFiles[i] + '"]').prop('checked', true);
+	}
+}
+
 function loadConfig() {
 	try {
 		pathToDirectory = db.get('archiveLocation').value();
@@ -245,9 +288,7 @@ function loadConfig() {
 		$('#archiveFreqSlider').val(sliderValue);
 
 		// Exceptions
-		for(var i = 0; i < exceptionFiles.length; i++) {
-			$('input[type=checkbox][value="' + exceptionFiles[i] + '"]').prop('checked', true);
-		}
+		loadExceptions();
 
 		if(smartArchiveEnabled)
 			$('#smartArchiveCheckbox').prop('checked', true);
