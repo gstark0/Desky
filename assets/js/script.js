@@ -1,4 +1,5 @@
 const fs = require('fs')
+var archiver = require('archiver');
 const app = remote.app;
 
 require('electron').ipcRenderer.on('clean', function(event) {
@@ -199,6 +200,10 @@ function checkClean(maxDifference) {
 	}
 }
 
+Array.prototype.diff = function(a) {
+    return this.filter(function(i) {return a.indexOf(i) < 0;});
+};
+
 function clean() {
 	console.log('SHOULD CLEAR NOW');
 	
@@ -211,23 +216,22 @@ function clean() {
 
 	// var pathToDirectory = $('#choose-directory-label').val(); //$('#choose-directory')[0].files[0].path;
 	var pathToArchive = pathToDirectory + '/' + datetime;
-	if (process.platform !== 'darwin') {
 
-	} else {
-		var shellCommand = 'mv';
-		for(var i = 0; i < desktopFiles.length; i++) {
-			if($.inArray(desktopFiles[i], exceptionFiles) < 0)
-				shellCommand = shellCommand + ' $HOME/Desktop/\'' + desktopFiles[i] + '\'';
-		}
-		shellCommand = shellCommand + ' ' + pathToArchive + '/';
-		console.log(shellCommand);
-		shell.exec('mkdir ' + pathToArchive, {async: true});
-		shell.exec(shellCommand, {async: true});
-		if(zipArchiveEnabled) {
-			console.log('cd ' + pathToDirectory + '; zip -r ' + datetime + ' ' + datetime)
-			shell.exec('cd ' + pathToDirectory + '; zip -r ' + datetime + ' ' + datetime, {async: true});
-			shell.exec('rm -rf ' + pathToArchive, {async: true});
-		}
+	shell.mkdir(pathToArchive)
+	shell.cd('~/Desktop')
+	shell.mv(desktopFiles.diff(exceptionFiles), pathToArchive);
+
+	if(zipArchiveEnabled) {
+		var output = fs.createWriteStream(pathToArchive + '.zip');
+		var archive = archiver('zip', {
+				zlib: { level: 0 } // Sets the compression level.
+		});
+		output.on('close', function() {
+			shell.rm('-rf', pathToArchive)
+		});
+		archive.pipe(output);
+		archive.directory(pathToArchive, '');
+		archive.finalize();
 	}
 	
 	refreshFiles();
