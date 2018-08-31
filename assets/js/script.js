@@ -152,28 +152,24 @@ function startClean() {
 				//w.close();
 				break;
 			case '2':
-				showNotification('Desktop will be cleaned every computer startup!');
-				w.hide();
-				break;
-			case '3':
 				iv = setInterval(checkClean.bind(null, 3600), interval); //3600, interval 
 				//showAlert('All set!'); 
 				showNotification('Desktop will be cleaned every hour!');
 				w.hide();
 				break;
-			case '4':
+			case '3':
 				iv = setInterval(checkClean.bind(null, 86400), interval); //86400, interval
 				//showAlert('All set!'); 
 				showNotification('Desktop will be cleaned every day!');
 				w.hide();
 				break;
-			case '5':
+			case '4':
 				iv = setInterval(checkClean.bind(null, 604800), interval); //604800, interval
 				//showAlert('All set!'); 
 				showNotification('Desktop will be cleaned every week!');
 				w.hide();
 				break;
-			case '6':
+			case '5':
 				iv = setInterval(checkClean.bind(null, 2419200), interval); //2419200, interval
 				//showAlert('All set!'); 
 				showNotification('Desktop will be cleaned every month!');
