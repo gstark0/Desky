@@ -12,10 +12,13 @@ function createWindow () {
     title: 'KeepDesktopClean',
     width: 640, height: 360,
     resizable: false,
+    maximizable: false,
     fullscreen: false,
     transparent: true,
     frame: false
   })
+
+  
 
   tray = new Tray('./iconTemplate.png')
   const contextMenu = Menu.buildFromTemplate([
@@ -44,6 +47,7 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null
   })
+
 }
 
 // This method will be called when Electron has finished

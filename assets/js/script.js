@@ -246,18 +246,15 @@ function changeArchiveFrequency(step) {
 			$('#freq-label').text('Just once');
 			break;
 		case '2':
-			$('#freq-label').text('Every startup');
-			break;
-		case '3':
 			$('#freq-label').text('Once an hour');
 			break;
-		case '4':
+		case '3':
 			$('#freq-label').text('Once a day');
 			break;
-		case '5':
+		case '4':
 			$('#freq-label').text('Once a week');
 			break;
-		case '6':
+		case '5':
 			$('#freq-label').text('Once a month');
 			break;
 	}
