@@ -106,12 +106,12 @@ var iv;
 loadConfig();
 
 function apply() {
-	saveConfig(); // This is gonna be moved to 'else' statement below
 	
 	if($('#choose-directory-label').text() == 'NO LOCATION SPECIFIED') {
 		$('#location-error').show();
 	} else {
 		startClean();
+		saveConfig();
 	}
 	//w.hide();
 }
@@ -213,6 +213,18 @@ function clean() {
 	// var pathToDirectory = $('#choose-directory-label').val(); //$('#choose-directory')[0].files[0].path;
 	var pathToArchive = pathToDirectory + '/' + datetime;
 
+	// Check if application is somewhere on Desktop, if yes, add its path to exceptions (if it's not already there)
+	executableLocation = app.getAppPath().replace(/\\/g, '/');
+	shell.cd('~/Desktop');
+	desktopLocation = shell.pwd()['stdout'] + '/';
+	if(executableLocation.startsWith(desktopLocation)) {
+		executableLocation = executableLocation.replace(desktopLocation, '') + '/';
+		executableLocation = executableLocation.split('/')[0];
+		if($.inArray(executableLocation, exceptionFiles) == -1) {
+			exceptionFiles.push(executableLocation);
+		}
+	}
+	
 	shell.mkdir(pathToArchive)
 	shell.cd('~/Desktop')
 	shell.mv(desktopFiles.diff(exceptionFiles), pathToArchive);
@@ -229,6 +241,7 @@ function clean() {
 		archive.directory(pathToArchive, '');
 		archive.finalize();
 	}
+	
 	
 	refreshFiles();
 	loadExceptions();
@@ -265,6 +278,7 @@ function loadExceptions() {
 	for(var i = 0; i < exceptionFiles.length; i++) {
 		$('input[type=checkbox][value="' + exceptionFiles[i] + '"]').prop('checked', true);
 	}
+	applyExceptions();
 }
 
 function loadConfig() {
@@ -289,7 +303,7 @@ function loadConfig() {
 		if(zipArchiveEnabled)
 			$('#zipArchiveCheckbox').prop('checked', true);
 		smartArchiveCheck();
-		applyExceptions();
+		loadExceptions();
 		if(sliderValue != '1')
 			startClean();
 	} catch(err) {
