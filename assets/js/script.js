@@ -110,9 +110,9 @@ function apply() {
 	if($('#choose-directory-label').text() == 'NO LOCATION SPECIFIED') {
 		$('#location-error').show();
 	} else {
+		saveConfig();
 		clean();
 		startClean();
-		saveConfig();
 	}
 	//w.hide();
 }
@@ -145,7 +145,9 @@ function startClean() {
 	if(smartArchiveEnabled) {
 		iv = setInterval(checkCleanSmart, interval); //3600, interval
 		showNotification('Smart archive activated!');
+		w.hide();
 	} else {
+		console.log(sliderValue)
 		switch(sliderValue) {
 			case '1':
 				showAlert('Cleaned!');
@@ -226,7 +228,7 @@ function clean() {
 	}
 	
 	shell.mkdir(pathToArchive)
-	shell.cd('~/Desktop')
+	//shell.cd('~/Desktop')
 	shell.mv(desktopFiles.diff(exceptionFiles), pathToArchive);
 
 	if(zipArchiveEnabled) {
