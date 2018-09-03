@@ -110,6 +110,7 @@ function apply() {
 	if($('#choose-directory-label').text() == 'NO LOCATION SPECIFIED') {
 		$('#location-error').show();
 	} else {
+		clean();
 		startClean();
 		saveConfig();
 	}
@@ -147,7 +148,6 @@ function startClean() {
 	} else {
 		switch(sliderValue) {
 			case '1':
-				clean();
 				showAlert('Cleaned!');
 				//w.close();
 				break;
