@@ -203,8 +203,6 @@ Array.prototype.diff = function(a) {
 };
 
 function clean() {
-	console.log('SHOULD CLEAR NOW');
-	
 	var currentdate = new Date();
 	var datetime = currentdate.getDate() + '-'
 				+ (currentdate.getMonth()+1)  + '-' 
@@ -227,29 +225,30 @@ function clean() {
 		}
 	}
 	
-	shell.mkdir(pathToArchive)
-	//shell.cd('~/Desktop')
-	shell.mv(desktopFiles.diff(exceptionFiles), pathToArchive);
+	var filesToMove = desktopFiles.diff(exceptionFiles);
+	if(filesToMove.length > 0) {
+		shell.mkdir(pathToArchive)
+		//shell.cd('~/Desktop')
+		shell.mv(filesToMove, pathToArchive);
 
-	if(zipArchiveEnabled) {
-		var output = fs.createWriteStream(pathToArchive + '.zip');
-		var archive = archiver('zip', {
-				zlib: { level: 0 } // Sets the compression level.
-		});
-		output.on('close', function() {
-			shell.rm('-rf', pathToArchive)
-		});
-		archive.pipe(output);
-		archive.directory(pathToArchive, '');
-		archive.finalize();
+		if(zipArchiveEnabled) {
+			var output = fs.createWriteStream(pathToArchive + '.zip');
+			var archive = archiver('zip', {
+					zlib: { level: 0 } // Sets the compression level.
+			});
+			output.on('close', function() {
+				shell.rm('-rf', pathToArchive)
+			});
+			archive.pipe(output);
+			archive.directory(pathToArchive, '');
+			archive.finalize();
+		}
+
+		refreshFiles();
+		loadExceptions();
+
+		showNotification('Desktop cleaned!');
 	}
-	
-	
-	refreshFiles();
-	loadExceptions();
-
-	showNotification('Desktop cleaned!');
-	console.log('NOTIFYYYYY')
 }
 
 function changeArchiveFrequency(step) {
