@@ -9,7 +9,7 @@ var tray;
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    title: 'KeepDesktopClean',
+    title: 'Desky',
     width: 640, height: 360,
     resizable: false,
     maximizable: false,
@@ -19,14 +19,17 @@ function createWindow () {
   })
 
   
-
-  tray = new Tray('./iconTemplate.png')
+  if (process.platform !== 'darwin') {
+    tray = new Tray('./assets/icons/win/icon.png')
+  } else {
+    tray = new Tray('./assets/icons/mac/iconTemplate.png')
+  }
   const contextMenu = Menu.buildFromTemplate([
       {label: 'Clean now', type: 'normal', click: function() { mainWindow.webContents.send('clean') }},
       {label: 'Settings', type: 'normal', click: function() { mainWindow.show() }},
       {label: 'Quit', type: 'normal', click: function() { app.quit() }}
     ])
-  tray.setToolTip('This is my application.')
+  tray.setToolTip('Simple and user-friendly desktop cleaner.')
   tray.setContextMenu(contextMenu)
   /*
   tray.on('click', () => {

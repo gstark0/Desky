@@ -249,6 +249,7 @@ function clean() {
 	loadExceptions();
 
 	showNotification('Desktop cleaned!');
+	console.log('NOTIFYYYYY')
 }
 
 function changeArchiveFrequency(step) {
