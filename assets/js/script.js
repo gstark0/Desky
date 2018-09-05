@@ -134,7 +134,7 @@ function showAlert(message) {
 }
 
 function showNotification(message) {
-	let myNotification = new Notification('KeepDesktopClean', { body: message })
+	let myNotification = new Notification('Desky', { body: message })
 }
 
 function startClean() {
