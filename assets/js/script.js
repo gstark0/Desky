@@ -225,7 +225,8 @@ function clean() {
 		}
 	}
 	
-	var filesToMove = desktopFiles.diff(exceptionFiles);
+	refreshFiles();
+	var filesToMove = desktopFiles.diff(exceptionFiles).diff(pathToDirectory);
 	if(filesToMove.length > 0) {
 		shell.mkdir(pathToArchive)
 		//shell.cd('~/Desktop')
@@ -248,6 +249,8 @@ function clean() {
 		loadExceptions();
 
 		showNotification('Desktop cleaned!');
+	} else {
+		showNotification('Nothing to clean!');
 	}
 }
 
