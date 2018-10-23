@@ -1,6 +1,7 @@
 const fs = require('fs')
 var archiver = require('archiver');
 const app = remote.app;
+const dialog = remote.dialog;
 
 require('electron').ipcRenderer.on('clean', function(event) {
 	clean();
@@ -134,7 +135,11 @@ function showAlert(message) {
 }
 
 function showNotification(message) {
-	let myNotification = new Notification('Desky', { body: message })
+	if (process.platform !== 'darwin') {
+		dialog.showMessageBox(options={title: 'Desky', message: message})
+	} else {
+		let myNotification = new Notification('Desky', { body: message })
+	}
 }
 
 function startClean() {
