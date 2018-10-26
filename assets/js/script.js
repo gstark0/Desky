@@ -208,6 +208,7 @@ Array.prototype.diff = function(a) {
 };
 
 function clean() {
+
 	var currentdate = new Date();
 	var datetime = currentdate.getDate() + '-'
 				+ (currentdate.getMonth()+1)  + '-' 
@@ -314,6 +315,10 @@ function loadConfig() {
 			$('#zipArchiveCheckbox').prop('checked', true);
 		smartArchiveCheck();
 		loadExceptions();
+
+		//let w = remote.getCurrentWindow();
+		//w.hide();
+
 		if(sliderValue != '1')
 			startClean();
 	} catch(err) {
