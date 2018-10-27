@@ -1,5 +1,6 @@
 {
-  "name": "keepdesktopclean",
+  "name": "desky",
+  "productName": "desky",
   "version": "0.1.0",
   "description": "A simple app to keep everyone's desktop clean!",
   "main": "main.js",
@@ -17,7 +18,8 @@
   },
   "homepage": "https://github.com/gstark0/KeepDesktopClean#readme",
   "devDependencies": {
-    "electron": "^2.0.5"
+    "electron": "^2.0.12",
+    "electron-packager": "^12.2.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.1.1",

@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, Menu, Tray, dialog} = require('electron')
+const {app, BrowserWindow, Menu, Tray, dialog, nativeImage} = require('electron')
+const path = require('path')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -20,9 +21,13 @@ function createWindow () {
 
   
   if (process.platform !== 'darwin') {
-    tray = new Tray('./assets/icons/win/icon.png')
+    let p = path.join(__dirname, 'assets/icons/win/icon.png')
+    let ni = nativeImage.createFromPath(p);
+    tray = new Tray(ni)
   } else {
-    tray = new Tray('./assets/icons/mac/iconTemplate.png')
+    let p = path.join(__dirname, 'assets/icons/mac/iconTemplate.png')
+    let ni = nativeImage.createFromPath(p);
+    tray = new Tray(ni)
   }
   const contextMenu = Menu.buildFromTemplate([
       {label: 'Clean now', type: 'normal', click: function() { mainWindow.webContents.send('clean') }},
