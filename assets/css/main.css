@@ -141,18 +141,31 @@ html, body {
 
 .sidebar button {
 	position: absolute;
-	bottom: 20px;
-	right: 20px;
-	width: 40px;
-	height: 40px;
 	border-radius: 50%;
-	background-color: #57d99c;
 	border: none;
 	transition: .2s;
+	width: 40px;
+	height: 40px;
 }
 
-.sidebar button:hover {
+#exceptions-accept {
+	bottom: 70px;
+	right: 20px;
+	background-color: #57d99c;
+}
+
+#exceptions-accept:hover {
 	background-color: #42a576;
+}
+
+#exceptions-refresh {
+	background-color: #3b6c94;
+	bottom: 20px;
+	right: 20px;
+}
+
+#exceptions-refresh:hover {
+	background-color: #366184;
 }
 
 /* -------- INPUTS -------- */
