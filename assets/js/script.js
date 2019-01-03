@@ -4,7 +4,13 @@ const app = remote.app;
 const dialog = remote.dialog;
 
 require('electron').ipcRenderer.on('clean', function(event) {
-	clean();
+	let w = remote.getCurrentWindow();
+	if(askForNameEnabled) {
+		$('#archive-name-modal').show();
+		w.show();
+	} else {
+		clean();
+	}
 });
 
 const Swal = require('sweetalert2') // In order to make cool alerts
@@ -78,17 +84,28 @@ $('#choose-directory').change(function() {
 	}
 });
 
-function smartArchiveCheck() {
-	if($('#smartArchiveCheckbox').is(':checked')) {
-		$('#archiveFreqSlider').prop('disabled', true);
-		$('#freq-big-label').css('text-decoration', 'line-through');
-		$('#freq-label').css('text-decoration', 'line-through');
+$('#archive-name-cancel').on('click', function() {
+	$('#archive-name-modal').hide();
+	w.hide();
+});
+
+$('#archive-name-ok').on('click', function() {
+	let archiveName = $('#archive-name').val()
+	if(/^[\w.-]+$/.test(archiveName) && archiveName.trim() != '') {
+		$('#archive-name-modal').hide();
+		$('#archive-name').css('border', '1px solid #7b8d9c');
+		$('#archive-name').val('');
+		clean(archiveName);
 	} else {
-		$('#archiveFreqSlider').prop('disabled', false);
-		$('#freq-big-label').css('text-decoration', 'none');
-		$('#freq-label').css('text-decoration', 'none');
+		$('#archive-name').css('border', '1px solid red');
 	}
-}
+});
+
+$('#archive-name').keypress(function(e){
+	if(e.which == 13){
+		$('#archive-name-ok').click();
+	}
+});
 
 /*
 var configContent = fs.readFileSync(app.getPath('userData') + '/' + configName, 'utf-8');
@@ -100,7 +117,7 @@ var interval = 1800000;
 var pathToDirectory;
 var sliderValue;
 var lastTime;
-var smartArchiveEnabled;
+var askForNameEnabled;
 var zipArchiveEnabled;
 var interval = 1800000;
 var iv;
@@ -147,53 +164,41 @@ function startClean() {
 	let w = remote.getCurrentWindow();
 	// sliderValue = $('#archiveFreqSlider').val();
 	clearInterval(iv);
-	if(smartArchiveEnabled) {
-		iv = setInterval(checkCleanSmart, interval); //3600, interval
-		showNotification('Smart archive activated!');
-		w.hide();
-	} else {
-		console.log(sliderValue)
-		switch(sliderValue) {
-			case '1':
-				showNotification('Desktop will be cleaned on demand only!');
-				w.hide();
-				//w.close();
-				break;
-			case '2':
-				clean();
-				iv = setInterval(checkClean.bind(null, 3600), interval); //3600, interval 
-				//showAlert('All set!'); 
-				showNotification('Desktop will be cleaned every hour!');
-				w.hide();
-				break;
-			case '3':
-				clean();
-				iv = setInterval(checkClean.bind(null, 86400), interval); //86400, interval
-				//showAlert('All set!'); 
-				showNotification('Desktop will be cleaned every day!');
-				w.hide();
-				break;
-			case '4':
-				clean();
-				iv = setInterval(checkClean.bind(null, 604800), interval); //604800, interval
-				//showAlert('All set!'); 
-				showNotification('Desktop will be cleaned every week!');
-				w.hide();
-				break;
-			case '5':
-				clean();
-				iv = setInterval(checkClean.bind(null, 2419200), interval); //2419200, interval
-				//showAlert('All set!'); 
-				showNotification('Desktop will be cleaned every month!');
-				w.hide();
-				break;
-		}
-	}
-}
-
-function checkCleanSmart() {
-	if(shell.ls('~/Desktop').length - exceptionFiles.length > 10) {
-		clean();
+	console.log(sliderValue)
+	switch(sliderValue) {
+		case '1':
+			showNotification('Desktop will be cleaned on demand only!');
+			w.hide();
+			//w.close();
+			break;
+		case '2':
+			clean();
+			iv = setInterval(checkClean.bind(null, 3600), interval); //3600, interval 
+			//showAlert('All set!'); 
+			showNotification('Desktop will be cleaned every hour!');
+			w.hide();
+			break;
+		case '3':
+			clean();
+			iv = setInterval(checkClean.bind(null, 86400), interval); //86400, interval
+			//showAlert('All set!'); 
+			showNotification('Desktop will be cleaned every day!');
+			w.hide();
+			break;
+		case '4':
+			clean();
+			iv = setInterval(checkClean.bind(null, 604800), interval); //604800, interval
+			//showAlert('All set!'); 
+			showNotification('Desktop will be cleaned every week!');
+			w.hide();
+			break;
+		case '5':
+			clean();
+			iv = setInterval(checkClean.bind(null, 2419200), interval); //2419200, interval
+			//showAlert('All set!'); 
+			showNotification('Desktop will be cleaned every month!');
+			w.hide();
+			break;
 	}
 }
 
@@ -212,17 +217,23 @@ Array.prototype.diff = function(a) {
     return this.filter(function(i) {return a.indexOf(i) < 0;});
 };
 
-function clean() {
+function clean(archiveName='') {
 
-	var currentdate = new Date();
-	var datetime = currentdate.getDate() + '-'
-				+ (currentdate.getMonth()+1)  + '-' 
-				+ currentdate.getFullYear() + '@'  
-				+ currentdate.getHours() + '-'
-				+ currentdate.getMinutes();
+	var pathToArchive;
 
-	// var pathToDirectory = $('#choose-directory-label').val(); //$('#choose-directory')[0].files[0].path;
-	var pathToArchive = pathToDirectory + '/' + datetime;
+	if(archiveName != '') {
+		pathToArchive = pathToDirectory + '/' + archiveName + '';
+	} else {
+		var currentdate = new Date();
+		var datetime = currentdate.getDate() + '-'
+					+ (currentdate.getMonth()+1)  + '-' 
+					+ currentdate.getFullYear() + '@'  
+					+ currentdate.getHours() + '-'
+					+ currentdate.getMinutes();
+
+		// var pathToDirectory = $('#choose-directory-label').val(); //$('#choose-directory')[0].files[0].path;
+		pathToArchive = pathToDirectory + '/' + datetime;
+	}
 
 	// Check if application is somewhere on Desktop, if yes, add its path to exceptions (if it's not already there)
 	executableLocation = app.getAppPath().replace(/\\/g, '/');
@@ -302,7 +313,7 @@ function loadConfig() {
 		pathToDirectory = db.get('archiveLocation').value();
 		sliderValue = db.get('sliderValue').value();
 		lastTime = db.get('lastTime').value();
-		smartArchiveEnabled = db.get('smartArchiveEnabled').value();
+		askForNameEnabled = db.get('askForNameEnabled').value();
 		zipArchiveEnabled = db.get('zipArchiveEnabled').value();
 		exceptionFiles = db.get('exceptions').value();
 
@@ -314,11 +325,10 @@ function loadConfig() {
 		// Exceptions
 		loadExceptions();
 
-		if(smartArchiveEnabled)
-			$('#smartArchiveCheckbox').prop('checked', true);
+		if(askForNameEnabled)
+			$('#askForName').prop('checked', true);
 		if(zipArchiveEnabled)
 			$('#zipArchiveCheckbox').prop('checked', true);
-		smartArchiveCheck();
 		loadExceptions();
 
 		//let w = remote.getCurrentWindow();
@@ -336,16 +346,16 @@ function loadConfig() {
 
 function saveConfig() {
 	// Set some defaults (required if your JSON file is empty)
-	db.defaults({ archiveLocation: '', exceptions: [], smartArchiveEnabled: false, zipArchiveEnabled: false, sliderValue: 0, lastTime: 0 }).write()
+	db.defaults({ archiveLocation: '', exceptions: [], askForNameEnabled: false, zipArchiveEnabled: false, sliderValue: 0, lastTime: 0 }).write()
 
 	pathToDirectory = $('#choose-directory-label').text();
 	sliderValue = $('#archiveFreqSlider').val();
 	lastTime = $.now();
-	smartArchiveEnabled = $('#smartArchiveCheckbox').is(':checked');
+	askForNameEnabled = $('#askForName').is(':checked');
 	zipArchiveEnabled = $('#zipArchiveCheckbox').is(':checked');
 
 	db.set('archiveLocation', pathToDirectory).write();
-	db.set('smartArchiveEnabled', smartArchiveEnabled).write();
+	db.set('askForNameEnabled', askForNameEnabled).write();
 	db.set('zipArchiveEnabled', zipArchiveEnabled).write();
 	db.set('sliderValue', sliderValue).write();
 	db.set('lastTime', lastTime).write();

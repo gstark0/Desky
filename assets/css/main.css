@@ -292,6 +292,7 @@ html, body {
 	transition: .2s;
 	text-align: center;
 	color: white;
+	z-index: 1;
 }
 
 #go-button:hover {
@@ -307,4 +308,53 @@ html, body {
 	height: 60px;
 	line-height: 60px;
 	right: 100px;
+}
+
+/* -------- ARCHIVE NAME MODAL -------- */
+#archive-name-modal {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.7);
+	position: fixed;
+	z-index: 2;
+	display: none;
+}
+
+#archive-name-modal-container {
+	width: 350px;
+	height: 160px;
+	background-color: #181E26;
+	position: absolute;
+	top: 45%;
+	left: 50%;
+	transform: translate(-50%, -55%);
+}
+
+#archive-name-data {
+	position: absolute;
+	top: 55%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#archive-name-buttons {
+	width: 100%;
+	text-align: center;
+}
+
+#archive-name-data button {
+	margin-top: 25px;
+	background-color: transparent;
+	border: none;
+	color: white;
+	font-size: 13px;
+	padding-bottom: 0;
+}
+
+#archive-name-ok:hover {
+	color: #57d99c;
+}
+
+#archive-name-cancel:hover {
+	color: #7b8d9c;
 }

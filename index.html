@@ -35,8 +35,8 @@
         <div id="right-side" class="side">
             <div class="side-inner">
                 <div class="input-label">OPTIONS</div>
-                <label class="checkbox-container">Smart Archive
-                    <input type="checkbox" id='smartArchiveCheckbox' onclick="smartArchiveCheck()">
+                <label class="checkbox-container" id="askForNameCheckbox">Ask for name
+                    <input type="checkbox" id='askForName'>
                     <span class="checkmark"></span>
                 </label>
                 <label class="checkbox-container" style="margin-bottom: 30px;">.ZIP archive
@@ -45,8 +45,21 @@
                 </label>
 
                 <div class="input-label" id="freq-big-label">ARCHIVE FREQUENCY</div>
-                <div id="freq-label" style="font-size: 13; color: #7b8d9c;">Just once</div>
+                <div id="freq-label" style="font-size: 13; color: #7b8d9c;">Once a day</div>
                 <input oninput="changeArchiveFrequency(this.value)" type="range" min="1" max="5" value="1" step="1" class="slider" id="archiveFreqSlider">
+            </div>
+        </div>
+
+        <div id="archive-name-modal">
+            <div id="archive-name-modal-container">
+                <div id="archive-name-data">
+                    <div class="input-label">NAME OF THE ARCHIVE</div>
+                    <input class="custom-input" placeholder="desktop_archive" id="archive-name" type="text" name="archive_name">
+                    <div id="archive-name-buttons">
+                        <button id="archive-name-cancel">CANCEL</button>
+                        <button id="archive-name-ok">OK</button>
+                    </div>
+                </div>
             </div>
         </div>
 
