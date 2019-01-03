@@ -112,7 +112,6 @@ function apply() {
 		$('#location-error').show();
 	} else {
 		saveConfig();
-		clean();
 		startClean();
 	}
 	//w.hide();
@@ -127,6 +126,7 @@ function showAlert(message) {
 		confirmButtonColor: '#57d99c'
 	}).then(function() {
 		// it can do smth on 'OK' click
+		w.close();
 	});
 	$('body').removeClass('swal2-height-auto');
 	$('.swal2-styled:focus').css('box-shadow', 'none');
@@ -155,28 +155,33 @@ function startClean() {
 		console.log(sliderValue)
 		switch(sliderValue) {
 			case '1':
-				showAlert('Cleaned!');
+				showNotification('Desktop will be cleaned on demand only!');
+				w.hide();
 				//w.close();
 				break;
 			case '2':
+				clean();
 				iv = setInterval(checkClean.bind(null, 3600), interval); //3600, interval 
 				//showAlert('All set!'); 
 				showNotification('Desktop will be cleaned every hour!');
 				w.hide();
 				break;
 			case '3':
+				clean();
 				iv = setInterval(checkClean.bind(null, 86400), interval); //86400, interval
 				//showAlert('All set!'); 
 				showNotification('Desktop will be cleaned every day!');
 				w.hide();
 				break;
 			case '4':
+				clean();
 				iv = setInterval(checkClean.bind(null, 604800), interval); //604800, interval
 				//showAlert('All set!'); 
 				showNotification('Desktop will be cleaned every week!');
 				w.hide();
 				break;
 			case '5':
+				clean();
 				iv = setInterval(checkClean.bind(null, 2419200), interval); //2419200, interval
 				//showAlert('All set!'); 
 				showNotification('Desktop will be cleaned every month!');
@@ -263,7 +268,7 @@ function clean() {
 function changeArchiveFrequency(step) {
 	switch(step) {
 		case '1':
-			$('#freq-label').text('Just once');
+			$('#freq-label').text('On demand');
 			break;
 		case '2':
 			$('#freq-label').text('Once an hour');
