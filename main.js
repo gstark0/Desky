@@ -1,6 +1,10 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, Menu, Tray, dialog, nativeImage} = require('electron')
 const path = require('path')
+require('update-electron-app')({
+  repo: 'github.com/gstark0/Desky',
+  updateInterval: '24 hours'
+})
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
