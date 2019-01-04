@@ -297,8 +297,7 @@ function changeArchiveFrequency(step) {
 }
 
 function openExceptionsSidebar() {
-	console.log('WORKS?????????????????')
-	$('#exceptions-sidebar').css({width: '300px'});
+	$('#exceptions-sidebar').css({width: '55%'});
 }
 
 function loadExceptions() {

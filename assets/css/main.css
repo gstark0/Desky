@@ -98,7 +98,7 @@ html, body {
 }
 
 .exceptions-item {
-	width: 300px;
+	width: 100%;
 	height: 40px;
 	color: #526770;
 	display: block;
