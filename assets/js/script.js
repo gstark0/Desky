@@ -7,6 +7,7 @@ require('electron').ipcRenderer.on('clean', function(event) {
 	let w = remote.getCurrentWindow();
 	if(askForNameEnabled) {
 		$('#archive-name-modal').show();
+		$('#archive-name').focus();
 		w.show();
 	} else {
 		clean();
@@ -92,6 +93,7 @@ $('#archive-name-cancel').on('click', function() {
 $('#archive-name-ok').on('click', function() {
 	let archiveName = $('#archive-name').val()
 	if(/^[\w.-]+$/.test(archiveName) && archiveName.trim() != '') {
+		w.hide();
 		$('#archive-name-modal').hide();
 		$('#archive-name').css('border', '1px solid #7b8d9c');
 		$('#archive-name').val('');
